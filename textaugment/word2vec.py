@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Word2vec-based data augmentation 
+# Word2vec-based data augmentation
 #
 # Copyright (C) 2020
 # Author: Joseph Sefara
@@ -15,13 +15,13 @@ class Word2vec:
     """
     A set of functions used to augment data.
 
-    Typical usage: :: 
+    Typical usage: ::
         >>> from textaugment import Word2vec
         >>> t = Word2vec('path/to/gensim/model'or 'gensim model itself')
         >>> t.augment('I love school')
         i adore school
     """
-    
+
     def __init__(self, **kwargs):
         """
         A method to initialize a model on a given path.
@@ -49,7 +49,7 @@ class Word2vec:
 
         # Set verbose to false if does not exists
         try:
-            if kwargs['v']: 
+            if kwargs['v']:
                 self.v = True
             else:
                 self.v = False
@@ -59,7 +59,9 @@ class Word2vec:
         try:
             if "p" in kwargs:
                 if type(kwargs['p']) is not float:
-                    raise TypeError("p represent probability of success and must be a float from 0.1 to 0.9. E.g p=0.5")
+                    raise TypeError(
+                        "p represent probability of success and must be a float from 0.1 to 0.9. E.g p=0.5"
+                    )
                 elif type(kwargs['p']) is float:
                     self.p = kwargs['p']
             else:
@@ -74,25 +76,33 @@ class Word2vec:
             elif type(kwargs["runs"]) is not int:
                 raise TypeError("DataType for 'runs' must be an integer")
             if "model" not in kwargs:
-                raise ValueError("Set the value of model. e.g model='path/to/model' or model itself")
-            if type(kwargs['model']) not in [str,
-                                             gensim.models.word2vec.Word2Vec,
-                                             gensim.models.keyedvectors.Word2VecKeyedVectors,
-                                            gensim.models.keyedvectors.FastTextKeyedVectors]:
-                raise TypeError("Model path must be a string. "
-                                "Or type of model must be a gensim.models.word2vec.Word2Vec or "
-                                "gensim.models.keyedvectors.Word2VecKeyedVectors or "
-                                "gensim.models.keyedvectors.FastTextKeyedVectors type. "
-                                "To load a model use gensim.models.Word2Vec.load('path')")
+                raise ValueError(
+                    "Set the value of model. e.g model='path/to/model' or model itself"
+                )
+            if type(kwargs['model']) not in [
+                    str, gensim.models.word2vec.Word2Vec,
+                    gensim.models.keyedvectors.Word2VecKeyedVectors,
+                    gensim.models.keyedvectors.FastTextKeyedVectors
+            ]:
+                raise TypeError(
+                    "Model path must be a string. "
+                    "Or type of model must be a gensim.models.word2vec.Word2Vec or "
+                    "gensim.models.keyedvectors.Word2VecKeyedVectors or "
+                    "gensim.models.keyedvectors.FastTextKeyedVectors type. "
+                    "To load a model use gensim.models.Word2Vec.load('path')")
         except (ValueError, TypeError):
             raise
         else:
-            self.runs = kwargs["runs"] 
+            self.runs = kwargs["runs"]
             self.model = kwargs["model"]
             self.p = kwargs["p"]
             try:
                 if type(self.model) is str:
-                    self.model = gensim.models.Word2Vec.load(self.model)
+                    try:
+                        self.model = gensim.models.Word2Vec.load(self.model)
+                    except:
+                        self.model = gensim.models.KeyedVectors.load_word2vec_format(
+                            self.model, binary=True)
             except FileNotFoundError:
                 print("Error: Model not found. Verify the path.\n")
                 raise
@@ -114,15 +124,15 @@ class Word2vec:
     def augment(self, data):
         """
         The method to replace words with similar words.
-        
+
         :type data: str
         :param data: Input data
         :rtype:   str
         :return:  The augmented data
         """
-        
+
         # Avoid nulls and other unsupported types
-        if type(data) is not str: 
+        if type(data) is not str:
             raise TypeError("Only strings are supported")
         # Lower case and split
         data_tokens = data.lower().split()
