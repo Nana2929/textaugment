@@ -132,7 +132,10 @@ class Word2vec:
             for _ in range(self.runs):
                 for index in range(len(data_tokens)):  # Index from 0 to length of data_tokens
                     try:
-                        similar_words = [syn for syn, t in self.model.wv.most_similar(data_tokens[index])]
+                        similar_words = [
+                            syn for syn, t in self.model.most_similar(
+                                data_tokens[index])
+                        ]
                         r = random.randrange(len(similar_words))
                         data_tokens[index] = similar_words[r].lower()  # Replace with random synonym from 10 synonyms
                     except KeyError:
@@ -143,7 +146,10 @@ class Word2vec:
                 words = self.geometric(data=data_tokens_idx).tolist()  # List of words indexed
                 for w in words:
                     try:
-                        similar_words_and_weights = [(syn, t) for syn, t in self.model.wv.most_similar(w[1])]
+                        similar_words_and_weights = [
+                            (syn, t)
+                            for syn, t in self.model.most_similar(w[1])
+                        ]
                         similar_words = [word for word, t in similar_words_and_weights]
                         similar_words_weights = [t for word, t in similar_words_and_weights]
                         word = random.choices(similar_words, similar_words_weights, k=1)
