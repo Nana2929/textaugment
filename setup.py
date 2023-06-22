@@ -34,7 +34,7 @@ setuptools.setup(
       name='textaugment',
       version=__version__,
       packages=setuptools.find_packages(exclude=('test*', )),
-      author='Joseph Sefara',
+      author='Joseph Sefara (revised by Ching Wen Yang)',
       author_email='sefaratj@gmail.com',
       license='MIT',
       keywords=['text augmentation', 'python', 'natural language processing', 'nlp'],
