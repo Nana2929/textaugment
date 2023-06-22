@@ -81,7 +81,7 @@ class EDA:
             if not isinstance(kwargs['n'], int):
                 raise TypeError("n must be a valid integer")
 
-    def __init__(self, stop_words=None, random_state=1):
+    def __init__(self, stop_words=None, random_state=1, **kwargs):
         """A method to initialize parameters
 
         :type random_state: int
